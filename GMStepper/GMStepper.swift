@@ -8,7 +8,14 @@
 
 import UIKit
 
+public protocol GMStepperDelegate {
+    func valueIncreased()
+    func valueDecreased()
+}
+
 @IBDesignable public class GMStepper: UIControl {
+    
+    public var delegate: GMStepperDelegate?
 
     /// Current value of the stepper. Defaults to 0.
     @objc @IBInspectable public var value: Double = 0 {
@@ -330,8 +337,14 @@ import UIKit
     func updateValue() {
         if stepperState == .ShouldIncrease {
             value += stepValue
+            if let delegate = self.delegate {
+                delegate.valueIncreased()   
+            }
         } else if stepperState == .ShouldDecrease {
             value -= stepValue
+            if let delegate = self.delegate {
+                delegate.valueDecreased()   
+            }
         }
     }
     
